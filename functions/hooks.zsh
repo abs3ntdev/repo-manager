@@ -1,4 +1,3 @@
-# Default post-hook functions (users can override these)
 post_repo_clone() {
   cd "$1"
 }
