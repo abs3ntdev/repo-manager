@@ -10,7 +10,7 @@ repo_clone() {
   suffix=".git"
   mkdir -p "${output_path%"$suffix"}"
   
-  if [ ! -d "$output_path/.git" ]; then
+  if [ ! -d "${output_path%"$suffix"}/.git" ]; then
     repourl=$(echo "$repo_prefix@$cleaned" | sed -e "s/\//:/1")
     echo "Cloning $repourl to ${output_path%"$suffix"}..."
     git clone "$repourl" "${output_path%"$suffix"}"
