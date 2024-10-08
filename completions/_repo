@@ -1,0 +1,22 @@
+#compdef repo
+
+_arguments -s \
+  '1: :->cmds' \
+  '2: :->args' \
+  '*::options:->opts' && return 0
+
+cmds=(
+  'get:Clone a repository'
+  'open:Open the repository in a browser'
+  'aur:Clone an AUR repository'
+  'list:List all repositories'
+  'go:Navigate to a repository'
+  'goto:Navigate to a repository'
+  'new:Create a new repository'
+  'create:Create a new repository'
+  'help:Show help message'
+)
+
+if [[ $state == cmds ]]; then
+  _describe -t commands "repo commands" cmds
+fi
