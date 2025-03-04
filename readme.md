@@ -16,20 +16,6 @@ sheldon add repo-manager --github abs3ntdev/repo-manager
 zinit light abs3ntdev/repo-manager
 ```
 
-### Fish
-
-- Fisher
-
-```
-fisher install abs3ntdev/repo-manager
-```
-
-- Oh My Fish
-
-```
-omf install abs3ntdev/repo-manager
-```
-
 ## usage
 
 ```
@@ -88,41 +74,6 @@ post_repo_new() {
 }
 ```
 
-#### Fish
-
-Hooks are configured by overriding the functions provided in the plugin in hooks.fish
-The default hooks are:
-
-```fish
-function post_repo_clone
-    cd "$argv[1]"
-end
-
-function post_repo_goto
-    cd "$argv[1]"
-end
-
-function post_repo_new
-    cd "$argv[1]"
-end
-```
-
-You can override these in your config.fish or in a file sourced by your config.fish to do whatever you want. Example:
-
-```fish
-function post_repo_clone
-    code "$argv[1]"
-end
-
-function post_repo_goto
-    nvim "$argv[1]"
-end
-
-function post_repo_new
-    some_script "$argv[1]"
-end
-```
-
 ### base directory
 
 #### ZSH
@@ -131,12 +82,4 @@ The base directory is set via ENV. The default is $HOME/repos. You can change th
 
 ```zsh
 export REPO_BASE_DIR="whatever/you/want"
-```
-
-#### Fish
-
-The base directory is set via ENV. The default is $HOME/repos. You can change this by adding the following to your config.fish:
-
-```fish
-set -g REPO_BASE_DIR "whatever/you/want"
 ```
