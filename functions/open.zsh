@@ -1,4 +1,4 @@
-function _repo_open() {
+function repo_open() {
   local remote
   remote=$(git remote get-url origin)
 
