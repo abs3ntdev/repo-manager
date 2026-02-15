@@ -1,22 +1,82 @@
 #compdef repo
 
-_arguments -s \
-  '1: :->cmds' \
-  '2: :->args' \
-  '*::options:->opts' && return 0
+_repo_wt_commands() {
+  local -a wt_cmds
+  wt_cmds=(
+    'add:Create a new worktree for a branch'
+    'list:List all worktrees'
+    'ls:List all worktrees'
+    'rm:Remove a worktree'
+    'remove:Remove a worktree'
+    'go:Switch to a worktree'
+    'pr:Create a worktree from a GitHub PR'
+    'clean:Remove all worktrees except default'
+  )
+  _describe -t commands "worktree commands" wt_cmds
+}
 
-cmds=(
-  'get:Clone a repository'
-  'open:Open the repository in a browser'
-  'aur:Clone an AUR repository'
-  'list:List all repositories'
-  'go:Navigate to a repository'
-  'goto:Navigate to a repository'
-  'new:Create a new repository'
-  'create:Create a new repository'
-  'help:Show help message'
-)
+_repo_find_root() {
+  local dir="$(pwd)"
+  while [[ "$dir" != "/" ]]; do
+    if [[ -d "$dir/.bare" ]]; then
+      echo "$dir"
+      return 0
+    fi
+    dir="$(dirname "$dir")"
+  done
+}
 
-if [[ $state == cmds ]]; then
-  _describe -t commands "repo commands" cmds
-fi
+_repo_wt_branches() {
+  local repo_root
+  repo_root=$(_repo_find_root)
+  if [[ -n "$repo_root" && -d "$repo_root/.bare" ]]; then
+    local -a branches
+    branches=(${(f)"$(git --git-dir="$repo_root/.bare" branch --format='%(refname:short)' 2>/dev/null)"})
+    _describe -t branches "branches" branches
+  fi
+}
+
+_repo() {
+  local -a cmds
+  cmds=(
+    'get:Clone a repository'
+    'open:Open the repository in a browser'
+    'aur:Clone an AUR repository'
+    'list:List all repositories'
+    'go:Navigate to a repository'
+    'goto:Navigate to a repository'
+    'new:Create a new repository'
+    'create:Create a new repository'
+    'wt:Worktree management'
+    'worktree:Worktree management'
+    'convert:Convert to worktree layout'
+    'help:Show help message'
+  )
+
+  _arguments -s \
+    '1: :->cmds' \
+    '*::args:->args' && return 0
+
+  case $state in
+    cmds)
+      _describe -t commands "repo commands" cmds
+      ;;
+    args)
+      case "${words[1]}" in
+        wt|worktree)
+          if (( CURRENT == 2 )); then
+            _repo_wt_commands
+          else
+            case "${words[2]}" in
+              add|rm|remove|go)
+                _repo_wt_branches
+                ;;
+            esac
+          fi
+          ;;
+      esac
+      ;;
+  esac
+}
+
+_repo "$@"

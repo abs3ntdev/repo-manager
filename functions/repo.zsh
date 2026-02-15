@@ -1,14 +1,16 @@
 repo() {
   local cmd="$1"
-  local arg="$2"
+  shift
 
   case "$cmd" in
-    'get' ) repo_clone "git" "$arg" ;;
-    'aur' ) repo_clone "aur" "$arg" ;;
-    'open') repo_open ;;
-    'list') list_repos ;;
-    'go' | 'goto') repo_goto "$arg" ;;
-    'new' | 'create') repo_new "$arg" ;;
+    'get' )              repo_clone "git" "$1" ;;
+    'aur' )              repo_clone "aur" "$1" ;;
+    'open')              repo_open ;;
+    'list')              list_repos ;;
+    'go' | 'goto')       repo_goto "$1" ;;
+    'new' | 'create')    repo_new "$1" ;;
+    'wt' | 'worktree')   repo_worktree "$@" ;;
+    'convert')           repo_convert "$@" ;;
     'help' | "-h" | "-help" | "--help") repo_help ;;
     *) echo "Unknown command: $cmd"; repo_help; return 1 ;;
   esac
