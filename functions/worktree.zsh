@@ -138,8 +138,12 @@ repo_wt_pr() {
   local remote_url
   remote_url=$(git --git-dir="$bare_dir" remote get-url origin)
 
+  # convert remote URL to OWNER/REPO for gh
+  local gh_repo
+  gh_repo=$(echo "$remote_url" | sed -e 's|.*github\.com[:/]||' -e 's|\.git$||')
+
   local pr_branch
-  pr_branch=$(gh pr view "$pr_number" --json headRefName --jq '.headRefName' --repo "$remote_url" 2>/dev/null)
+  pr_branch=$(gh pr view "$pr_number" --json headRefName --jq '.headRefName' --repo "$gh_repo" 2>/dev/null)
 
   if [[ -z "$pr_branch" ]]; then
     echo "Error: Could not determine branch for PR #$pr_number"
