@@ -40,6 +40,7 @@ repo_wt_add() {
 
   if git --git-dir="$bare_dir" show-ref --verify --quiet "refs/remotes/origin/$branch"; then
     git --git-dir="$bare_dir" worktree add "$wt_path" "$branch"
+    git --git-dir="$bare_dir" branch --set-upstream-to="origin/$branch" "$branch"
   elif git --git-dir="$bare_dir" show-ref --verify --quiet "refs/heads/$branch"; then
     git --git-dir="$bare_dir" worktree add "$wt_path" "$branch"
   else
@@ -167,6 +168,8 @@ repo_wt_pr() {
     echo "Error: Failed to create worktree for PR #$pr_number"
     return 1
   fi
+
+  git --git-dir="$bare_dir" branch --set-upstream-to="origin/$pr_branch" "$pr_branch" 2>/dev/null
 
   echo "Created worktree for PR #$pr_number: $wt_path"
   post_wt_add "$wt_path"

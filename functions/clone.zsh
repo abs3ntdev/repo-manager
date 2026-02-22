@@ -49,6 +49,8 @@ repo_clone() {
     return 1
   fi
 
+  git --git-dir="$repo_dir/.bare" branch --set-upstream-to="origin/$default_branch" "$default_branch"
+
   echo "Created worktree: $repo_dir/$default_branch"
   post_repo_clone "$repo_dir/$default_branch"
 }

@@ -75,6 +75,8 @@ repo_convert() {
     echo "gitdir: $target_dir/.bare/worktrees/$current_branch" > "$wt_dir/.git"
   fi
 
+  git --git-dir="$target_dir/.bare" branch --set-upstream-to="origin/$current_branch" "$current_branch" 2>/dev/null
+
   echo "Conversion complete."
   echo "  Bare repo: $target_dir/.bare"
   echo "  Worktree:  $wt_dir"
