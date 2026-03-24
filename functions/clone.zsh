@@ -41,6 +41,9 @@ repo_clone() {
   # bare clones don't set a fetch refspec — fix that
   git --git-dir="$repo_dir/.bare" config remote.origin.fetch "+refs/heads/*:refs/remotes/origin/*"
 
+  # fetch to populate remote tracking refs (bare clone doesn't create them)
+  git --git-dir="$repo_dir/.bare" fetch origin
+
   local default_branch
   default_branch=$(detect_default_branch "$repo_dir/.bare")
 
