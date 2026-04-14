@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+#MISE description="Run all checks"
+#MISE depends=["lint", "check-syntax", "load-test", "test-urls"]
+echo "All checks passed"

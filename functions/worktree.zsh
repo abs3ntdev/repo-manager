@@ -39,19 +39,23 @@ repo_wt_add() {
   git --git-dir="$bare_dir" fetch origin
 
   if git --git-dir="$bare_dir" show-ref --verify --quiet "refs/remotes/origin/$branch"; then
-    git --git-dir="$bare_dir" worktree add "$wt_path" "$branch"
+    if ! git --git-dir="$bare_dir" worktree add "$wt_path" "$branch"; then
+      echo "Error: Failed to create worktree for branch $branch"
+      return 1
+    fi
     git --git-dir="$bare_dir" branch --set-upstream-to="origin/$branch" "$branch"
   elif git --git-dir="$bare_dir" show-ref --verify --quiet "refs/heads/$branch"; then
-    git --git-dir="$bare_dir" worktree add "$wt_path" "$branch"
+    if ! git --git-dir="$bare_dir" worktree add "$wt_path" "$branch"; then
+      echo "Error: Failed to create worktree for branch $branch"
+      return 1
+    fi
   else
     local default_branch
     default_branch=$(detect_default_branch "$bare_dir")
-    git --git-dir="$bare_dir" worktree add -b "$branch" "$wt_path" "$default_branch"
-  fi
-
-  if [[ $? -ne 0 ]]; then
-    echo "Error: Failed to create worktree for branch $branch"
-    return 1
+    if ! git --git-dir="$bare_dir" worktree add -b "$branch" "$wt_path" "$default_branch"; then
+      echo "Error: Failed to create worktree for branch $branch"
+      return 1
+    fi
   fi
 
   echo "Created worktree: $wt_path"
@@ -140,8 +144,9 @@ repo_wt_pr() {
   remote_url=$(git --git-dir="$bare_dir" remote get-url origin)
 
   # convert remote URL to OWNER/REPO for gh
-  local gh_repo
-  gh_repo=$(echo "$remote_url" | sed -e 's|.*github\.com[:/]||' -e 's|\.git$||')
+  local gh_repo="$remote_url"
+  gh_repo="${gh_repo%.git}"
+  gh_repo="${gh_repo##*github.com[:/]}"
 
   local pr_branch
   pr_branch=$(gh pr view "$pr_number" --json headRefName --jq '.headRefName' --repo "$gh_repo" 2>/dev/null)
@@ -190,13 +195,13 @@ repo_wt_clean() {
       if [[ "$wt_path" == "$bare_dir" ]]; then
         continue
       fi
-      local wt_name="$(basename "$wt_path")"
+      local wt_name
+      wt_name="$(basename "$wt_path")"
       if [[ "$wt_name" == "$default_branch" ]]; then
         continue
       fi
       echo "Removing worktree: $wt_path"
-      git --git-dir="$bare_dir" worktree remove "$wt_path" 2>/dev/null
-      if [[ $? -ne 0 ]]; then
+      if ! git --git-dir="$bare_dir" worktree remove "$wt_path" 2>/dev/null; then
         echo "  Warning: Could not remove $wt_path (may have uncommitted changes)"
       fi
     fi

@@ -36,6 +36,20 @@ _repo_wt_branches() {
   fi
 }
 
+_repo_repos() {
+  local base_dir="${REPO_BASE_DIR:-$HOME/repos}"
+  if [[ ! -d "$base_dir" ]]; then
+    return
+  fi
+  local -a repos
+  repos=(${(f)"$(find "$base_dir" -type d -name ".bare" -o -type d -name ".git" -not -path "*/.bare/*" 2>/dev/null | while read -r d; do
+    local parent
+    parent="$(dirname "$d")"
+    echo "${parent#"$base_dir"/}"
+  done | sort -u)"})
+  _describe -t repos "repositories" repos
+}
+
 _repo() {
   local -a cmds
   cmds=(
@@ -63,6 +77,9 @@ _repo() {
       ;;
     args)
       case "${words[1]}" in
+        go|goto)
+          _repo_repos
+          ;;
         wt|worktree)
           if (( CURRENT == 2 )); then
             _repo_wt_commands

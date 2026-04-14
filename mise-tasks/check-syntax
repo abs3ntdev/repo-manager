@@ -1,0 +1,7 @@
+#!/usr/bin/env zsh
+#MISE description="Check zsh syntax on all files"
+err=0
+for f in functions/*.zsh repo.plugin.zsh; do
+  zsh -n "$f" 2>&1 || err=1
+done
+exit $err

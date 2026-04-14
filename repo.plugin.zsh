@@ -1,11 +1,19 @@
 REPO_BASE_DIR="${REPO_BASE_DIR:-$HOME/repos}"
 
-for script in "${0:A:h}/functions/"*.zsh; do
-  source "$script"
-done
+source "${0:A:h}/functions/core.zsh"
+source "${0:A:h}/functions/hooks.zsh"
+source "${0:A:h}/functions/clone.zsh"
+source "${0:A:h}/functions/convert.zsh"
+source "${0:A:h}/functions/goto.zsh"
+source "${0:A:h}/functions/help.zsh"
+source "${0:A:h}/functions/list.zsh"
+source "${0:A:h}/functions/new.zsh"
+source "${0:A:h}/functions/open.zsh"
+source "${0:A:h}/functions/worktree.zsh"
+source "${0:A:h}/functions/repo.zsh"
 
-if [[ -d "${0:A:h}/completion" ]]; then
-  fpath=("${0:A:h}/completion" $fpath)
+if [[ -d "${0:A:h}/completions" ]]; then
+  fpath=("${0:A:h}/completions" "${fpath[@]}")
   autoload -Uz compinit && compinit
 fi
 

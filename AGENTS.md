@@ -2,13 +2,16 @@
 
 ## What this is
 
-A **Zsh plugin** (not a compiled program). All code is shell script sourced by Zsh plugin managers (antidote, sheldon, zinit). There is no build step, no package manifest, no tests, no CI.
+A **Zsh plugin** (not a compiled program). All code is shell script sourced by Zsh plugin managers (antidote, sheldon, zinit). There is no build step or package manifest. Linting and tests are run via mise tasks.
 
 ## Structure
 
-- `repo.plugin.zsh` -- sole entrypoint; sources everything in `functions/` and sets up completions
+- `repo.plugin.zsh` -- sole entrypoint; explicitly sources each file in `functions/` and sets up completions
 - `functions/*.zsh` -- one file per feature; functions are loaded into the user's shell session
 - `completions/_repo` -- Zsh `compdef` completion definition
+- `mise.toml` -- project-local mise config (tools, env)
+- `mise-tasks/` -- file-based mise tasks (lint, check-syntax, load-test, test-urls, test)
+- `tests/test_urls.zsh` -- URL parsing/cleaning test suite
 
 ## Function naming
 
@@ -18,7 +21,7 @@ A **Zsh plugin** (not a compiled program). All code is shell script sourced by Z
 
 ## Command dispatch
 
-`functions/repo.zsh` contains the `repo()` function that routes subcommands to handlers. Adding a new command means adding a case there and a corresponding function file.
+`functions/repo.zsh` contains the `repo()` function that routes subcommands to handlers. Adding a new command means adding a case there, a corresponding function file, and a new `source` line in `repo.plugin.zsh`.
 
 ## Hook system
 
@@ -27,10 +30,6 @@ A **Zsh plugin** (not a compiled program). All code is shell script sourced by Z
 ## Directory convention
 
 Repos live at `$REPO_BASE_DIR/<host>/<owner>/<repo>/` (default base: `$HOME/repos`). Bare repo in `.bare/`, worktrees as branch-named subdirectories.
-
-## Known issue
-
-`repo.plugin.zsh` line 7 checks for `completion/` (singular) but the directory is `completions/` (plural). Automatic fpath registration is broken.
 
 ## External tools
 
@@ -41,6 +40,10 @@ Repos live at `$REPO_BASE_DIR/<host>/<owner>/<repo>/` (default base: `$HOME/repo
 
 ## Working on this repo
 
-- No linter, formatter, or test runner is configured. Validate changes by sourcing `repo.plugin.zsh` in a Zsh session.
+- Run `mise test` to run all checks (shellcheck lint, zsh syntax check, load test, URL parsing tests). Tasks live in `mise-tasks/` as standalone scripts.
+- Run `mise run test-urls -v` to see verbose URL conversion output.
 - All functions must be valid Zsh (not POSIX sh, not Bash). Use Zsh-specific features like `${0:A:h}`, `(( ))` arithmetic, and `typeset`.
+- Use `[[ ]]` for all conditionals (not `[ ]`).
+- All variables in functions must be declared `local`.
+- Avoid forking to external tools (sed, awk, grep) when zsh parameter expansion can do the job.
 - Commit messages in this repo are terse (single words/phrases).

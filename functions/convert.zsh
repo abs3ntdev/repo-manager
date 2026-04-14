@@ -41,7 +41,8 @@ repo_convert() {
   mkdir -p "$wt_dir"
 
   for item in "$target_dir"/*; do
-    local base="$(basename "$item")"
+    local base
+    base="$(basename "$item")"
     if [[ "$base" == "$current_branch" ]]; then
       continue
     fi
@@ -50,7 +51,8 @@ repo_convert() {
 
   # move dotfiles (skip .git, .bare, . and ..)
   for item in "$target_dir"/.*; do
-    local base="$(basename "$item")"
+    local base
+    base="$(basename "$item")"
     case "$base" in
       .|..|.bare|.git) continue ;;
     esac

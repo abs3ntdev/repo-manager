@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+#MISE description="Lint all files with shellcheck"
+shellcheck --shell=bash functions/*.zsh repo.plugin.zsh

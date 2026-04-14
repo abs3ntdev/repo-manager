@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+#MISE description="Test URL parsing and cleaning functions (pass -v for verbose)"
+#USAGE flag "-v --verbose" help="Show converted values for passing tests"
+if [[ "${usage_verbose}" == "true" ]]; then
+  export VERBOSE=1
+fi
+exec zsh tests/test_urls.zsh

@@ -1,5 +1,5 @@
 repo_clone() {
-  if [ -z "$2" ]; then
+  if [[ -z "$2" ]]; then
     echo "Error: Repository path is required"
     return 1
   fi
@@ -24,8 +24,7 @@ repo_clone() {
     return 0
   fi
 
-  local repourl
-  repourl=$(echo "$repo_prefix@$cleaned" | sed -e "s/\//:/1")
+  local repourl="${repo_prefix}@${cleaned/\//:}"
 
   echo "Cloning $repourl to $repo_dir (bare + worktree)..."
 

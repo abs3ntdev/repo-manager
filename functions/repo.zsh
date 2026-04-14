@@ -1,4 +1,9 @@
 repo() {
+  if [[ -z "$1" ]]; then
+    repo_help
+    return 1
+  fi
+
   local cmd="$1"
   shift
 

@@ -1,0 +1,9 @@
+#!/usr/bin/env zsh
+#MISE description="Source the plugin in a fresh zsh and verify repo function exists"
+source repo.plugin.zsh
+if (( $+functions[repo] )); then
+  echo "OK: repo function loaded"
+else
+  echo "FAIL: repo function not found" >&2
+  exit 1
+fi

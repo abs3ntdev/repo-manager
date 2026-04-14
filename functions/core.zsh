@@ -1,15 +1,23 @@
 clean_repo_path() {
-  stripped=$1
+  local stripped="$1"
   stripped="${stripped#http://}"
   stripped="${stripped#https://}"
-  stripped="${stripped#git@}"
   stripped="${stripped#ssh://}"
+  stripped="${stripped#git@}"
   stripped="${stripped#aur@}"
-  stripped=$(echo "$stripped" | sed -e "s/:/\//1")
 
-  if [[ ! "$stripped" =~ "/" ]]; then
+  # convert first colon to slash (host:path -> host/path)
+  if [[ "$stripped" == *:* ]]; then
+    stripped="${stripped%%:*}/${stripped#*:}"
+  fi
+
+  # if no dot before the first slash, it's a short form like "user/repo"
+  # prepend github.com
+  local before_slash="${stripped%%/*}"
+  if [[ "$before_slash" != *.* ]]; then
     stripped="github.com/$stripped"
   fi
+
   echo "$stripped"
 }
 

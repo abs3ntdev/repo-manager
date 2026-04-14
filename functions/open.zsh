@@ -1,21 +1,30 @@
-function repo_open() {
+repo_open() {
   local remote
   remote=$(git remote get-url origin)
 
-  # Replace git@ with https://
-  remote=${remote/git@/https://}
+  # strip .git suffix
+  remote="${remote%.git}"
 
-  # Replace the colon after the domain with a slash
-  # This handles git@github.com:user/repo.git -> https://github.com/user/repo.git
-  remote=$(echo "$remote" | sed -E 's|^https://([^/]+):|https://\1/|')
+  # convert SSH-style URLs to https
+  # git@github.com:user/repo -> https://github.com/user/repo
+  if [[ "$remote" == git@* ]]; then
+    remote="${remote#git@}"
+    remote="https://${remote/://}"
+  fi
 
-  # Check if xdg-open exists
+  # convert ssh:// URLs to https
+  # ssh://git@github.com/user/repo -> https://github.com/user/repo
+  if [[ "$remote" == ssh://* ]]; then
+    remote="${remote#ssh://}"
+    remote="${remote#git@}"
+    remote="https://$remote"
+  fi
+
   if ! command -v xdg-open >/dev/null 2>&1; then
     echo "Error: xdg-open command not found"
     return 1
   fi
 
-  # Try to open the URL
   if ! xdg-open "$remote" 2>/dev/null; then
     echo "Error: Failed to open $remote"
     return 1

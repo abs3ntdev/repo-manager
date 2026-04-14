@@ -1,0 +1,5 @@
+[tools]
+shellcheck = "latest"
+
+[env]
+REPO_BASE_DIR = "{{ get_env(name='REPO_BASE_DIR', default='~/repos') }}"
