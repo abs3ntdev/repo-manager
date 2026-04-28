@@ -2,4 +2,4 @@
 shellcheck = "latest"
 
 [env]
-REPO_BASE_DIR = "{{ get_env(name='REPO_BASE_DIR', default='~/repos') }}"
+REPO_BASE_DIR = "{{ get_env(name='REPO_BASE_DIR', default=get_env(name='XDG_PROJECTS_DIR', default='~/repos')) }}"

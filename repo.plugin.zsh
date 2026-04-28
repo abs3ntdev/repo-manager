@@ -1,4 +1,4 @@
-REPO_BASE_DIR="${REPO_BASE_DIR:-$HOME/repos}"
+REPO_BASE_DIR="${REPO_BASE_DIR:-${XDG_PROJECTS_DIR:-$HOME/repos}}"
 
 source "${0:A:h}/functions/core.zsh"
 source "${0:A:h}/functions/hooks.zsh"

@@ -29,7 +29,7 @@ A **Zsh plugin** (not a compiled program). All code is shell script sourced by Z
 
 ## Directory convention
 
-Repos live at `$REPO_BASE_DIR/<host>/<owner>/<repo>/` (default base: `$HOME/repos`). Bare repo in `.bare/`, worktrees as branch-named subdirectories.
+Repos live at `$REPO_BASE_DIR/<host>/<owner>/<repo>/`. Base resolves as: `$REPO_BASE_DIR` > `$XDG_PROJECTS_DIR` > `$HOME/repos`. Bare repo in `.bare/`, worktrees as branch-named subdirectories.
 
 ## External tools
 

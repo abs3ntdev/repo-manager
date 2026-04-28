@@ -147,7 +147,13 @@ post_wt_add() {
 
 ### base directory
 
-The base directory is set via ENV. The default is `$HOME/repos`. You can change this by adding the following to your .zshrc:
+The base directory is resolved in this order:
+
+1. `$REPO_BASE_DIR` -- explicit override
+2. `$XDG_PROJECTS_DIR` -- from [xdg-user-dirs](https://www.freedesktop.org/wiki/Software/xdg-user-dirs/) (e.g. `$HOME/Projects`)
+3. `$HOME/repos` -- hardcoded fallback
+
+To override, add to your `.zshrc`:
 
 ```zsh
 export REPO_BASE_DIR="whatever/you/want"
