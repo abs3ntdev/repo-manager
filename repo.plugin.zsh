@@ -14,6 +14,4 @@ source "${0:A:h}/functions/repo.zsh"
 
 if [[ -d "${0:A:h}/completions" ]]; then
   fpath=("${0:A:h}/completions" "${fpath[@]}")
-  autoload -Uz compinit && compinit
 fi
-
