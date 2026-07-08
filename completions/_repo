@@ -37,9 +37,8 @@ _repo_wt_branches() {
 }
 
 _repo_repos() {
-  local base_dir="${REPO_BASE_DIR:-${XDG_PROJECTS_DIR:+$XDG_PROJECTS_DIR/repos}}"
-  base_dir="${base_dir:-$HOME/repos}"
-  if [[ ! -d "$base_dir" ]]; then
+  local base_dir="$REPO_BASE_DIR"
+  if [[ -z "$base_dir" || ! -d "$base_dir" ]]; then
     return
   fi
   local -a repos
@@ -65,6 +64,7 @@ _repo() {
     'wt:Worktree management'
     'worktree:Worktree management'
     'convert:Convert to worktree layout'
+    'migrate:Move the base directory'
     'help:Show help message'
   )
 
@@ -80,6 +80,9 @@ _repo() {
       case "${words[1]}" in
         go|goto)
           _repo_repos
+          ;;
+        migrate)
+          _files -/
           ;;
         wt|worktree)
           if (( CURRENT == 2 )); then

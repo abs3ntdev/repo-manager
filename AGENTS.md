@@ -25,7 +25,7 @@ A **Zsh plugin** (not a compiled program). All code is shell script sourced by Z
 
 ## Hook system
 
-`functions/hooks.zsh` defines default hooks (`post_repo_clone`, `post_wt_add`, `post_wt_rm`, `post_wt_go`) that users override in their `.zshrc`. Hooks receive a path argument.
+`functions/hooks.zsh` defines default hooks (`post_repo_clone`, `post_wt_add`, `post_wt_rm`, `post_wt_go`, `post_repo_migrate`) that users override in their `.zshrc`. Hooks receive a path argument (`post_repo_migrate` receives old and new base paths).
 
 ## Directory convention
 

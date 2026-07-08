@@ -10,6 +10,7 @@ Commands:
   go|goto <repo>      Navigate to a repository (worktree picker if applicable)
   new|create <repo>   Create a new repository
   convert [path]      Convert a standard clone to worktree layout
+  migrate <dir>       Move the base directory and repair worktree links
   wt <subcommand>     Worktree management (run from inside a repo)
   help                Show this help message
 
@@ -28,5 +29,6 @@ Examples:
   repo wt pr 123
   repo wt clean
   repo convert
+  repo migrate ~/Projects/repos
 EOF
 }

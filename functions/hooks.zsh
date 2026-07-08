@@ -21,3 +21,7 @@ post_wt_go() {
 post_wt_rm() {
   :
 }
+
+post_repo_migrate() {
+  :
+}

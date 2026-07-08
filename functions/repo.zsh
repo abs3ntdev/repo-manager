@@ -16,6 +16,7 @@ repo() {
     'new' | 'create')    repo_new "$1" ;;
     'wt' | 'worktree')   repo_worktree "$@" ;;
     'convert')           repo_convert "$@" ;;
+    'migrate')           repo_migrate "$1" ;;
     'help' | "-h" | "-help" | "--help") repo_help ;;
     *) echo "Unknown command: $cmd"; repo_help; return 1 ;;
   esac

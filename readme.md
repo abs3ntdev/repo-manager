@@ -36,6 +36,7 @@ Commands:
   go|goto <repo>      Navigate to a repository (worktree picker if applicable)
   new|create <repo>   Create a new repository
   convert [path]      Convert a standard clone to worktree layout
+  migrate <dir>       Move the base directory and repair worktree links
   wt <subcommand>     Worktree management (run from inside a repo)
   help                Show this help message
 
@@ -54,6 +55,7 @@ Examples:
   repo wt pr 123
   repo wt clean
   repo convert
+  repo migrate ~/Projects/repos
 ```
 
 ### directory layout
@@ -131,6 +133,7 @@ post_repo_new()   { cd "$1" }
 post_wt_add()     { cd "$1" }
 post_wt_go()      { cd "$1" }
 post_wt_rm()      { : }
+post_repo_migrate() { : }
 ```
 
 Override these in your .zshrc to customize behavior:
@@ -157,4 +160,27 @@ To override, add to your `.zshrc`:
 
 ```zsh
 export REPO_BASE_DIR="whatever/you/want"
+```
+
+The plugin exports `REPO_BASE_DIR`, so scripts run from your shell can rely on it
+being set.
+
+### migrating the base directory
+
+To move all repositories to a new base directory:
+
+```zsh
+repo migrate ~/new/base/dir
+```
+
+This moves everything from the current base to the new one, runs
+`git worktree repair` on every bare repo to fix the absolute paths git stores in
+worktree links, updates `REPO_BASE_DIR` for the current session, and calls the
+`post_repo_migrate` hook with the old and new paths. Override the hook to update
+anything else that references repo paths:
+
+```zsh
+post_repo_migrate() {
+  # e.g. rewrite opencode session paths from "$1" to "$2"
+}
 ```
