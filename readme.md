@@ -150,7 +150,7 @@ post_wt_add() {
 The base directory is resolved in this order:
 
 1. `$REPO_BASE_DIR` -- explicit override
-2. `$XDG_PROJECTS_DIR` -- from [xdg-user-dirs](https://www.freedesktop.org/wiki/Software/xdg-user-dirs/) (e.g. `$HOME/Projects`)
+2. `$XDG_PROJECTS_DIR/repos` -- from [xdg-user-dirs](https://www.freedesktop.org/wiki/Software/xdg-user-dirs/) (e.g. `$HOME/Projects/repos`)
 3. `$HOME/repos` -- hardcoded fallback
 
 To override, add to your `.zshrc`:

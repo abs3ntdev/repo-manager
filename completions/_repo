@@ -37,7 +37,8 @@ _repo_wt_branches() {
 }
 
 _repo_repos() {
-  local base_dir="${REPO_BASE_DIR:-${XDG_PROJECTS_DIR:-$HOME/repos}}"
+  local base_dir="${REPO_BASE_DIR:-${XDG_PROJECTS_DIR:+$XDG_PROJECTS_DIR/repos}}"
+  base_dir="${base_dir:-$HOME/repos}"
   if [[ ! -d "$base_dir" ]]; then
     return
   fi
