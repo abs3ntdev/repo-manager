@@ -25,7 +25,7 @@ repo_open() {
     return 1
   fi
 
-  if ! xdg-open "$remote" 2>/dev/null; then
+  if ! setsid -f xdg-open "$remote" </dev/null >/dev/null 2>&1; then
     echo "Error: Failed to open $remote"
     return 1
   fi
